@@ -254,4 +254,6 @@ exports.otp = (req, res) => {
         email: user.email
       });
     });
-};
+};exports.test = (req,res)=>{
+  res.status(200).send({ message: "test works" });
+}

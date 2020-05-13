@@ -297,27 +297,53 @@ exports.deletewhats = (req, res) => {
   };
 exports.piechartCount =(req,res)=>{
   var publicCount=0,privateCount=0,totalCount=0;
-  publicCount=Api.count({access:"public"},(err,result)=>{
+  Api.count({access:"public"},(err,result)=>{
     if(err){
       console.log(err)
     }
     publicCount=result
-    console.log(result)
+    Api.count({access:"private"},(err,result)=>{
+      if(err){
+        console.log(err)
+      }
+      privateCount=result
+      // Api.count({},(err,result)=>{
+      //   if(err){
+      //     console.log(err)
+      //   }
+      //   totalCount=result
+      //   console.log(totalCount)
+      // });
+      res.status(200).send({
+        PublicAPIs:publicCount,
+        PrivateAPI:privateCount
+      })
+    });
   });
-  privateCount=Api.count({access:"private"},(err,result)=>{
+}
+exports.Count =(req,res)=>{
+  var userCount=0,totalCount=0;
+  Api.count({},(err,result)=>{
     if(err){
       console.log(err)
     }
-    privateCount=result
-    console.log(result)
+    apiCount=result
+    User.count({},(err,result)=>{
+      if(err){
+        console.log(err)
+      }
+      userCount=result
+      // Api.count({},(err,result)=>{
+      //   if(err){
+      //     console.log(err)
+      //   }
+      //   totalCount=result
+      //   console.log(totalCount)
+      // });
+      res.status(200).send({
+        apicount:apiCount,
+        usercount:userCount
+      })
+    });
   });
-  totalCount=Api.count({},(err,result)=>{
-    if(err){
-      console.log(err)
-    }
-    totalCount=result
-    console.log(totalCount)
-  });
-  console.log(totalCount)
-  res.status(200).send("success")
 }

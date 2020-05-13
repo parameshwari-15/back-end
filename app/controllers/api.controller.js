@@ -7,6 +7,7 @@ var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 // const xyz="db.APIRecords";
+const Api = db.APIRecords;
 
 exports.test = (req, res) => {
     res.status(200).send("testing comment");
@@ -43,21 +44,25 @@ exports.test = (req, res) => {
 //     })
 // }
 
- exports.view = (req, res)=> {
-    MongoClient.connect(url, function(err, client) {
-        var db=client.db('bezkoder_db');
-        assert.equal(null, err);
-        var cursor = db.collection('apirecords').find({'apiname':"test2"})
-        cursor.each(function(err, doc) {
-            assert.equal(err, null);
-            if (doc != null) {
-                res.send(doc);
-            } else {
-                client.close();
-            }
-        });
-    });
-  }
+exports.view = (req, res)=> {
+  // res.status(200).send("it works");
+  Api.find({
+   // title: req.body.title
+ })
+   .exec((err, api) => {
+     if (err) {
+       res.status(500).send({ message: err });
+       return;
+     }
+
+     if (!api) {
+       return res.status(404).send({ message: "No Api found." });
+     }
+     res.status(200).send({
+         api:api
+     });
+   });
+}
   exports.postapi=(req,res)=>{
     console.log(req.body.apirecords)
      MongoClient.connect(url, function(err, client) {
@@ -67,6 +72,8 @@ exports.test = (req, res) => {
                     'CreatedBy': req.body.apirecords.CreatedBy,
                     'Version' : req.body.apirecords.version,
                     'Swagger' :req.body.apirecords.swagger,
+                    'Link': req.body.apirecords.link,
+                    'Request':req.body.apirecords.request,
                     'apiname': req.body.apirecords.apiname,
                     'dateCreated':new Date(),
                     'Description':req.body.apirecords.description,

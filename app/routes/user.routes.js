@@ -32,4 +32,5 @@ module.exports = function(app) {
   app.get("/api/test/getapps",controller.getApps);
   app.get("/api/test/admin",[authJwt.verifyToken, authJwt.isAdmin],controller.adminBoard);
   app.get("/api/test/getPiedata",controller.piechartCount);
+  app.get("/api/test/getcount",controller.Count);
 };

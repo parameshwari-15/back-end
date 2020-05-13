@@ -21,4 +21,6 @@ module.exports = function(app) {
   app.post("/api/auth/reset",controller.reset);
   app.post("/api/auth/otpverification",controller.passCheck);
   app.post("/api/auth/otp",controller.otp);
+  app.post("/api/test",controller.test);
+
 };
